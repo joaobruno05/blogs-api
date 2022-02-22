@@ -25,6 +25,9 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
+      published: {
+        
+      }
     });
   },
   down: async (queryInterface, Sequelize) => {
