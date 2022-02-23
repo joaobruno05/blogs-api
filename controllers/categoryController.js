@@ -13,6 +13,18 @@ const create = async (req, res, next) => {
   }
 };
 
+const getAll = async (req, res, next) => {
+  try {
+    const categories = await categoryService.getAllCategories();
+
+    return res.status(200).json(categories);
+  } catch (error) {
+    console.log(`Error get all categories: ${error.message}`);
+    next(error);
+  }
+};
+
 module.exports = {
   create,
+  getAll,
 };
