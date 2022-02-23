@@ -5,7 +5,7 @@ const BlogPost = (sequelize, DataTypes) => {
     userId: DataTypes.INTEGER,
   },
   {
-    timestamp: false,
+    timestamps: false,
   });
   return blogPost;
 };

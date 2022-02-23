@@ -3,7 +3,7 @@ const Category = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
   },
   {
-    timestamp: false,
+    timestamps: false,
   });
   return category;
 };
