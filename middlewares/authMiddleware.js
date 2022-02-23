@@ -4,7 +4,7 @@ const authMiddleware = (req, res, next) => {
   try {
     const { authorization } = req.headers;
 
-    if (!authorization) return res.status(401).json({ message: 'Missing auth token' });
+    if (!authorization) return res.status(401).json({ message: 'Token not found' });
 
     const user = token.verifyToken(authorization);
     req.user = user;
@@ -12,7 +12,7 @@ const authMiddleware = (req, res, next) => {
     next();
   } catch (error) {
    console.log(`Error auth: ${error.message}`);
-   return res.status(401).json({ message: error.message });
+   return res.status(401).json({ message: 'Expired or invalid token' });
   }
 };
 
