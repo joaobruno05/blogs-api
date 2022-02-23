@@ -9,9 +9,9 @@ const schema = Joi.object({
 });
 
 const createUser = async (displayName, email, password, image) => {
-  const userIsValid = schema.validate({ displayName, email, password });
+  const userValidate = schema.validate({ displayName, email, password });
   
-  const { error } = userIsValid;
+  const { error } = userValidate;
   
   if (error) throw (errorDefault(400, error.details[0].message));
 
