@@ -16,6 +16,18 @@ const create = async (req, res, next) => {
   }
 };
 
+const getAll = async (req, res, next) => {
+  try {
+    const blogPosts = await blogPostService.getAllBlogPosts();
+
+    return res.status(200).json(blogPosts);
+  } catch (error) {
+    console.log(`Error get all blog posts: ${error.message}`);
+    next(error);
+  }
+};
+
 module.exports = {
   create,
+  getAll,
 };

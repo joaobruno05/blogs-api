@@ -27,20 +27,27 @@ const Attributes = {
   },
 };
 
+const options = () => ({
+  timestamps: false,
+  tableName: 'BlogPosts',
+});
+
 module.exports = (sequelize) => {
   const BlogPost = sequelize.define(
     'BlogPost',
     Attributes,
-    {
-      timestamps: false,
-      tableName: 'BlogPosts',
-    },
+    options(),
   );
 
   BlogPost.associate = (models) => {
     BlogPost.belongsTo(models.User, { 
       foreignKey: 'userId',
       as: 'user',
+    });
+    BlogPost.belongsToMany(models.Category, {
+      foreignKey: 'postId',
+      as: 'categories',
+      through: models.PostCategory,
     });
   };
 
