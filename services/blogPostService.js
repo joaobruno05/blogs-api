@@ -1,7 +1,6 @@
 const Joi = require('joi');
 const { BlogPost, User, Category } = require('../models');
 const categoryService = require('./categoryService');
-const loginService = require('./loginService');
 const errorDefault = require('../errors/errorDefault');
 
 const schemaBlogPost = Joi.object({
