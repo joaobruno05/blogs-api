@@ -15,6 +15,21 @@ const validateCategories = async (categories) => {
   return validCategories.length === categories.length;
 };
 
+const includeOptions = {
+  include: [
+    {
+      model: User,
+      as: 'user',
+      attributes: { exclude: ['password'] },
+    },
+    {
+      model: Category,
+      as: 'categories',
+      through: { attributes: [] },
+    },
+  ],
+};
+
 const createBlogPost = async (userId, title, content, categoryIds) => {
   const BlogPostValidate = schemaBlogPost.validate({ title, content, categoryIds });
 
@@ -32,25 +47,21 @@ const createBlogPost = async (userId, title, content, categoryIds) => {
 };
 
 const getAllBlogPosts = async () => {
-  const blogPosts = await BlogPost.findAll({
-    include: [
-      {
-        model: User,
-        as: 'user',
-        attributes: { exclude: ['password'] },
-      },
-      {
-        model: Category,
-        as: 'categories',
-        through: { attributes: [] },
-      },
-    ],
-  });
+  const blogPosts = await BlogPost.findAll(includeOptions);
 
   return blogPosts;
+};
+
+const findByIdBlogPosts = async (id) => {
+  const blogPost = await BlogPost.findByPk(id, includeOptions);
+
+  if (!blogPost) throw (errorDefault(404, 'Post does not exist'));
+
+  return blogPost;
 };
 
 module.exports = {
   createBlogPost,
   getAllBlogPosts,
+  findByIdBlogPosts,
 };

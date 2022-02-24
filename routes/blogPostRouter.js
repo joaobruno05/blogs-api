@@ -6,5 +6,6 @@ const blogPostController = require('../controllers/blogPostController');
 
 router.post('/', authMiddleware, blogPostController.create);
 router.get('/', authMiddleware, blogPostController.getAll);
+router.get('/:id', authMiddleware, blogPostController.findById);
 
 module.exports = router;
