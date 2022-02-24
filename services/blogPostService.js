@@ -1,12 +1,18 @@
 const Joi = require('joi');
 const { BlogPost, User, Category } = require('../models');
 const categoryService = require('./categoryService');
+const loginService = require('./loginService');
 const errorDefault = require('../errors/errorDefault');
 
 const schemaBlogPost = Joi.object({
   title: Joi.string().required(),
   content: Joi.string().required(),
   categoryIds: Joi.array().required(),
+});
+
+const schemaUpdate = Joi.object({
+  title: Joi.string().required(),
+  content: Joi.string().required(),
 });
 
 const validateCategories = async (categories) => {
@@ -60,8 +66,34 @@ const findByIdBlogPosts = async (id) => {
   return blogPost;
 };
 
+const updateBlogPost = async (id, userId, data) => {
+  const { title, content, categoryIds } = data;
+
+  if (categoryIds) throw (errorDefault(400, 'Categories cannot be edited'));
+
+  const validBlogPost = schemaUpdate.validate({ title, content });
+  const { error } = validBlogPost;
+  
+  if (error) throw (errorDefault(400, error.details[0].message));
+
+  const blogPostUpdated = await findByIdBlogPosts(id);
+
+  if (blogPostUpdated.userId !== userId) throw (errorDefault(401, 'Unauthorized user'));
+
+  await BlogPost.update(
+    { title, content },
+    { where: { id } },
+    includeOptions,
+  );
+
+  const { categories } = blogPostUpdated;
+
+  return { title, content, userId, categories };
+};
+
 module.exports = {
   createBlogPost,
   getAllBlogPosts,
   findByIdBlogPosts,
+  updateBlogPost,
 };

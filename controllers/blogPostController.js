@@ -40,8 +40,24 @@ const findById = async (req, res, next) => {
   }
 };
 
+const update = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const data = req.body;
+    const { user: { dataValues: { id: userId } } } = req;
+
+    const blogPost = await blogPostService.updateBlogPost(id, userId, data);
+
+    return res.status(200).json(blogPost);
+  } catch (error) {
+    console.log(`Error update blog post: ${error.message}`);
+    next(error);
+  }
+};
+
 module.exports = {
   create,
   getAll,
   findById,
+  update,
 };
