@@ -75,9 +75,9 @@ const updateBlogPost = async (id, userId, data) => {
   
   if (error) throw (errorDefault(400, error.details[0].message));
 
-  const blogPostUpdated = await findByIdBlogPosts(id);
+  const blogPost = await findByIdBlogPosts(id);
 
-  if (blogPostUpdated.userId !== userId) throw (errorDefault(401, 'Unauthorized user'));
+  if (blogPost.userId !== userId) throw (errorDefault(401, 'Unauthorized user'));
 
   await BlogPost.update(
     { title, content },
@@ -85,9 +85,19 @@ const updateBlogPost = async (id, userId, data) => {
     includeOptions,
   );
 
-  const { categories } = blogPostUpdated;
+  const { categories } = blogPost;
 
   return { title, content, userId, categories };
+};
+
+const removeBlogPost = async (id, userId) => {
+  const post = await findByIdBlogPosts(id);
+
+  if (post.userId !== userId) throw (errorDefault(401, 'Unauthorized user'));
+
+  const blogPost = await BlogPost.destroy({ where: { id } });
+
+  return blogPost;
 };
 
 module.exports = {
@@ -95,4 +105,5 @@ module.exports = {
   getAllBlogPosts,
   findByIdBlogPosts,
   updateBlogPost,
+  removeBlogPost,
 };

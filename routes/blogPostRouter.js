@@ -8,5 +8,6 @@ router.post('/', authMiddleware, blogPostController.create);
 router.get('/', authMiddleware, blogPostController.getAll);
 router.get('/:id', authMiddleware, blogPostController.findById);
 router.put('/:id', authMiddleware, blogPostController.update);
+router.delete('/:id', authMiddleware, blogPostController.remove);
 
 module.exports = router;
